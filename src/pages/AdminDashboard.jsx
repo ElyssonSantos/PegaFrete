@@ -446,6 +446,29 @@ export default function AdminDashboard() {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Version */}
+        <div className="mobile-card-list">
+          {dbOrders.map(o => (
+            <div className="mobile-item-card" key={o.id}>
+              <div className="mobile-item-header">
+                <strong>#{o.id.slice(0,8)}</strong>
+                <span className={`status-badge ${o.status === 'entregue' ? 'success' : 'info'}`}>{o.status}</span>
+              </div>
+              <div className="mobile-item-details">
+                <div className="mobile-detail-group">
+                  <span className="mobile-detail-label">Cliente</span>
+                  <span className="mobile-detail-value">{o.client?.first_name}</span>
+                </div>
+                <div className="mobile-detail-group">
+                  <span className="mobile-detail-label">Valor</span>
+                  <span className="mobile-detail-value">R$ {o.total_amount}</span>
+                </div>
+              </div>
+              <button className="btn-secondary" style={{width: '100%'}} onClick={() => setSelectedOrder(o)}>Ver Detalhes</button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -485,6 +508,32 @@ export default function AdminDashboard() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Version */}
+        <div className="mobile-card-list">
+          {dbCouriers.map(c => (
+            <div className="mobile-item-card" key={c.id}>
+              <div className="mobile-item-header">
+                <strong>{c.first_name} {c.last_name}</strong>
+                <span className={`status-badge ${c.status === 'ativo' ? 'success' : 'warning'}`}>{c.status}</span>
+              </div>
+              <div className="mobile-item-details">
+                <div className="mobile-detail-group">
+                  <span className="mobile-detail-label">Veículo</span>
+                  <span className="mobile-detail-value">{c.info?.vehicle_type}</span>
+                </div>
+                <div className="mobile-detail-group">
+                  <span className="mobile-detail-label">Cidade</span>
+                  <span className="mobile-detail-value">{c.info?.city}</span>
+                </div>
+              </div>
+              <div className="action-group" style={{marginTop: '12px'}}>
+                <button className="btn-primary-admin" style={{flex: 1}} onClick={() => handleAction('Aprovar ' + c.first_name)}>Aprovar</button>
+                <button className="btn-icon danger"><ShieldAlert/></button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

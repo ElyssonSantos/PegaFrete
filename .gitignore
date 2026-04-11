@@ -1,0 +1,25 @@
+# node.js
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# env
+.env
+.env.local
+.env.production
+.env.development
+
+# firebase
+firebase-service-account.json
+enviar-teste.cjs
+fix-json.cjs
+
+# os
+.DS_Store
+Thumbs.db

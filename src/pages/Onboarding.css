@@ -1,0 +1,138 @@
+.onboarding-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, #E8F5E9 0%, #FFFFFF 100%);
+}
+
+.onboarding-image-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.onboarding-icon {
+  width: 200px;
+  height: 200px;
+  background: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+.onboarding-content {
+  background: var(--card-bg);
+  padding: 40px 30px;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 40vh;
+}
+
+.dots-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--border-color);
+  border-radius: var(--radius-full);
+  transition: var(--transition);
+}
+
+.dot.active {
+  width: 24px;
+  background-color: var(--primary-color);
+}
+
+.onboarding-title {
+  margin-bottom: 12px;
+}
+
+.onboarding-subtitle {
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+
+.product-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.product-card {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  background: #F4F7F6;
+}
+
+/* Social Proof & Trust Badges */
+.social-proof-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-badge {
+  position: absolute;
+  top: -10px;
+  right: -20px;
+  background: var(--text-dark);
+  color: white;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 16px;
+  box-shadow: var(--shadow-md);
+  transform: rotate(10deg);
+  animation: badge-pulse 2s infinite alternate;
+}
+
+@keyframes badge-pulse {
+  from { transform: rotate(10deg) scale(1); }
+  to { transform: rotate(12deg) scale(1.05); }
+}
+
+.trusted-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(16, 185, 129, 0.05);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.flex-col { display: flex; flex-direction: column; }
+.gap-3 { gap: 12px; }

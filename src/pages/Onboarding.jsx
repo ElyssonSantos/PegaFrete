@@ -54,12 +54,14 @@ export default function Onboarding() {
     if (step < ONBOARDING_STEPS.length - 1) {
       setStep(step + 1);
     } else {
+      localStorage.setItem('pegafrete_onboarding_completed', 'true');
       navigate('/signup');
     }
   };
 
   const handleLogin = () => {
-    navigate('/client');
+    localStorage.setItem('pegafrete_onboarding_completed', 'true');
+    navigate('/login');
   };
 
   const currentStep = ONBOARDING_STEPS[step];

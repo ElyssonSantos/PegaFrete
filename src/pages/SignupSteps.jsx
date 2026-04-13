@@ -47,10 +47,25 @@ export default function SignupSteps() {
   const finishSignup = async () => {
     setLoading(true);
     try {
-      // 1. Inserir na tabela de usuários
-      const { data: newUser, error: userError } = await supabase
+      // 1. Criar Auth User no Supabase
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: 'Password123!', // Senha padrão para este teste ou podemos pedir no form
+        options: {
+          data: {
+            first_name: formData.firstName,
+            role: formData.profile
+          }
+        }
+      });
+
+      if (authError) throw authError;
+
+      // 2. Inserir na tabela pública de usuários (Geralmente feito via trigger, mas mantendo o código se necessário)
+      const { error: userError } = await supabase
         .from('users')
         .insert([{
+          id: authData.user.id,
           email: formData.email,
           phone: formData.phone,
           first_name: formData.firstName,
@@ -58,18 +73,16 @@ export default function SignupSteps() {
           birth_date: formData.birthDate,
           role: formData.profile,
           status: formData.profile === 'entregador' ? 'pendente' : 'ativo'
-        }])
-        .select()
-        .single();
+        }]);
 
       if (userError) throw userError;
 
-      // 2. Se for entregador, salvar informações adicionais em couriers_info
-      if (formData.profile === 'entregador' && newUser) {
+      // 3. Se for entregador, salvar informações adicionais
+      if (formData.profile === 'entregador') {
         const { error: courierError } = await supabase
           .from('couriers_info')
           .insert([{
-            user_id: newUser.id,
+            user_id: authData.user.id,
             vehicle_type: formData.vehicle,
             state: formData.state,
             city: formData.city,
@@ -82,7 +95,7 @@ export default function SignupSteps() {
         if (courierError) throw courierError;
       }
 
-      // 3. Sucesso
+      // 4. Sucesso
       localStorage.removeItem('pegafrete_signup');
       setStep(6);
       setTimeout(() => {

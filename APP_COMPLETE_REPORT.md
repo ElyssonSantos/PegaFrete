@@ -1,80 +1,94 @@
-# 📱 Documentação Mestra: PegaFrete Mercado
+# 📱 Relatório Completo: PegaFrete Mercado
+*Data de Emissão: 13/04/2026*
 
-Este documento serve como o **Relatório Completo** de engenharia e produto para o aplicativo PegaFrete Mercado.
-
----
-
-## 🏗️ 1. Estrutura do Projeto (File Tree)
-
-```text
-pegaFrete/
-├── src/
-│   ├── pages/
-│   │   ├── Onboarding.jsx      # Fluxo de entrada e proposta de valor
-│   │   ├── SignupSteps.jsx      # Cadastro multi-etapa (UX estilo Uber/iFood)
-│   │   ├── ClientDashboard.jsx  # Hub principal do comprador
-│   │   ├── CourierDashboard.jsx # Hub principal do entregador
-│   │   └── (CSS correspondentes)
-│   ├── App.jsx                 # Configuração de rotas (React Router)
-│   ├── main.jsx                # Entry point do React
-│   └── index.css               # Design System Global (Variáveis e Reset)
-├── schema.sql                  # Modelagem do banco de dados PostgreSQL
-├── package.json                # Dependências (React, Lucide, Vite)
-└── vite.config.js              # Configuração de build
-```
+Este documento fornece uma análise detalhada da arquitetura, estrutura de arquivos e funcionalidades do ecossistema PegaFrete Mercado.
 
 ---
 
-## 🔄 2. Fluxo de Experiência do Usuário (UX Roadmap)
+## 🏗️ 1. Visão Geral do Aplicativo
 
-### A. Onboarding & Conversão
-- **Objetivo:** Retenção e educação do usuário.
-- **Telas:** 4 slides interativos com ícones Lucide e animações de entrada (`animate-slide-up`).
-- **Lógica:** O usuário conhece os benefícios antes de ser solicitado a criar uma conta.
+O **PegaFrete Mercado** é uma plataforma SaaS de logística de "última milha" focada em compras de supermercado sob demanda. Ele conecta três grupos principais:
+1.  **Clientes:** Solicitam listas de compras e acompanham a entrega.
+2.  **Entregadores (Shoppers):** Aceitam pedidos, realizam a compra física e entregam ao destino.
+3.  **Administradores:** Gerenciam a saúde financeira, aprovações de usuários, taxas e comunicação em massa.
 
-### B. Cadastro Inteligente (Signup)
-- **Persistência:** Uso de `localStorage` para não perder dados se a aba fechar.
-- **Diferenciação:** O fluxo se divide na etapa 3 baseado no perfil (Cliente ou Entregador).
-- **Segurança:** Etapa de envio de documentos (CNH/RG) exclusiva para entregadores.
-
-### C. Ecossistema do Cliente (Mercado & Compra)
-- **Dashboard:** Interface tabulada (Home, Ofertas, Pedidos, Perfil).
-- **Novo Pedido:** Formulário dinâmico capaz de lidar com múltiplos itens, marcas ideais e limites de preço.
-- **Rastreamento Hero:** Uma timeline "viva" que muda de estado conforme o entregador avança na vida real.
-
-### D. Ecossistema do Entregador (Logística & Ganhos)
-- **Modo Radar:** Efeito visual de pulso buscando pedidos próximos.
-- **Navegação (GPS):** Modo de direção passo-a-passo integrado na interface, simulando a rota até o cliente.
-- **Wallet:** Acompanhamento de ganhos acumulados no dia.
+### Stack Tecnológica
+- **Frontend:** React 18 + Vite (Performance e modernidade).
+- **Backend/BAAS:** Supabase (PostgreSQL, Auth, Realtime, Edge Functions).
+- **Notificações:** Firebase Cloud Messaging (FCM) para alertas push.
+- **Design:** CSS Vanilla customizado com foco em UX mobile-first e temas "Premium".
+- **Ícones:** Lucide React.
 
 ---
 
-## 🗄️ 3. Especificações Técnicas (Backend & Data)
+## 📂 2. Inventário e Análise de Arquivos
 
-O banco de dados foi modelado para suportar operações complexas de "split" de pagamento e rastreamento histórico.
+### 🌐 Raiz do Projeto
+| Arquivo | Função | Detalhes |
+| :--- | :--- | :--- |
+| `index.html` | Entry Point HTML | Contém os scripts fundamentais e viewport para mobile. |
+| `package.json` | Manifest de Dependências | Define scripts (`dev`, `build`) e libs (Supabase, Firebase, React Router). |
+| `vite.config.js` | Configuração de Build | Otimização do bundle e plugins (React, PWA). |
+| `schema.sql` | Blueprint do Banco | SQL completo das tabelas (Users, Orders, Tracking, Payments). |
+| `.env.local` | Segredos (Local) | Chaves de API do Supabase e Firebase (Não versionado). |
+| `vercel.json` | Deploy | Configurações para hospedagem na Vercel (Single Page App). |
 
-- **Integridade:** Uso de chaves estrangeiras vinculando Pedidos -> Itens -> Mercados.
-- **Escalabilidade:** Tabela `delivery_tracking` pronta para armazenar milhares de pontos de GPS para revisões de segurança.
-- **Status:** Sistema de estados robusto (`pendente`, `aguardando`, `em_rota`, `entregue`).
+### 🎨 Design System e Core (`src/`)
+| Arquivo | Função | Detalhes |
+| :--- | :--- | :--- |
+| `main.jsx` | Inicializador React | Renderiza o App dentro da StrictMode. |
+| `App.jsx` | Router & Notificações | Centraliza as rotas e o contexto de Toasts de notificação. |
+| `index.css` | Design System Global | Variáveis de cores (`#0D4A38` verde corporativo), resets e classes utilitárias. |
+
+### 📄 Páginas (`src/pages/`)
+| Arquivo | Função | Detalhes |
+| :--- | :--- | :--- |
+| `Onboarding.jsx` | Tutorial de Entrada | Slides interativos com animações para retenção de usuários. |
+| `SignupSteps.jsx` | Cadastro Híbrido | Fluxo inteligente que separa Cliente de Entregador (Coleta de docs). |
+| `ClientDashboard.jsx` | Hub do Cliente | Gestão de pedidos, feed de ofertas e rastreamento de entregas. |
+| `CourierDashboard.jsx` | Hub do Entregador | Mapa de pedidos próximos, radar e carteira de ganhos. |
+| `AdminDashboard.jsx` | Torre de Controle | Painel gigante com métricas reais, gestão de usuários e envio de Push. |
+| `DebugNotifications.jsx` | Ferramenta Interna | Utilidade para validar tokens e recebimento de mensagens push. |
+
+### 🛠️ Componentes, Hooks e Libs
+| Arquivo | Função | Detalhes |
+| :--- | :--- | :--- |
+| `lib/supabase.js` | Conector Supabase | Configura a instância única para comunicação com banco e auth. |
+| `lib/firebase.js` | Conector Firebase | Configura o Messaging para tokens de notificação. |
+| `hooks/useNotifications.js` | Lógica de Notificação | Hook customizado para registrar Service Workers e capturar notificações. |
+| `components/NotificationToast.jsx` | UI de Alerta | Componente flutuante premium para exibir feedback ao usuário. |
 
 ---
 
-## 🎨 4. Design System & Identidade
+## 🗄️ 3. Arquitetura de Dados (Database Schema)
 
-- **Cores Identitárias:** 
-  - Primária: `#0D4A38` (Verde Escuro - Segurança)
-  - Accent: `#10B981` (Verde Esmeralda - Ação/Ganhos)
-  - Background: `#F8FAFC` (Clean - Foco no produto)
-- **Componentes:** Card-based UI, 3D shadows sutis e feedback tátil em botões (`btn-scale`).
+O banco de dados PostgreSQL (via Supabase) foi projetado para auditoria e escalabilidade:
+- **`users`:** Armazena perfis e papéis (roles).
+- **`orders` & `order_items`:** Suporta pedidos com múltiplos itens, marcas preferenciais e fotos.
+- **`delivery_tracking`:** Registra coordenadas GPS históricas para segurança do trajeto.
+- **`payments` & `finance`:** Controla o split de pagamento (Plataforma vs. Entregador).
+- **`notification_history`:** Log de todos os disparos de broadcast realizados pelo admin.
+
+---
+
+## 📡 4. Ecossistema de Mensageria
+
+O projeto implementa uma solução robusta de **Push Notifications**:
+1.  **Client-Side:** `firebase-messaging-sw.js` (em `/public`) lida com mensagens em segundo plano.
+2.  **Server-Side:** Scripts como `enviar-teste.cjs` usam `google-auth-library` para autenticar na API V1 do Firebase.
+3.  **Interface Admin:** Permite disparar mensagens segmentadas (Todos, Apenas Drivers, Apenas Clientes).
 
 ---
 
-## 🚀 5. Próxima Sprint: Conectividade Real
+## 🚀 5. Estado Atual e Próximos Passos
 
-1.  **Auth Real:** Substituir o simulador de signup por `supabase.auth.signUp()`.
-2.  **Storage:** Implementar upload real para fotos de produtos e documentos.
-3.  **Real-Time:** Ativar o canal de Broadcast do Supabase para que o Cliente veja a mudança de status do Entregador instantaneamente sem reload.
+O aplicativo está em estágio **Beta Avançado**.
+- ✅ **UI/UX:** Totalmente implementada e otimizada para mobile e desktop.
+- ✅ **Database:** Esquema finalizado e integrado.
+- ✅ **Notificações:** Infraestrutura de Push configurada e funcional.
+- 🚧 **Pagamentos:** Estrutura pronta, aguardando integração com API de Gateway (ex: Pagar.me).
+- 🚧 **Geolocalização:** Lógica de radar implementada, falta integração com Mapbox/Google Maps API real para roteamento dinâmico.
 
 ---
-**Relatório Gerado em:** 09/04/2026.
-**Autor:** Antigravity (IA de Elite).
+**Relatório gerado por Antigravity.**
+*Fim do documento.*

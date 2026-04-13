@@ -132,13 +132,17 @@ export default function ClientDashboard() {
             )}
             <section className="categories-section mt-4">
               <h3>Categorias</h3>
-              <div className="categories-grid">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
                 {['Supermercado', 'Farmácia', 'Hortifruti', 'Bebidas'].map((cat, i) => (
-                  <div className="category-item btn-scale" key={i} onClick={() => handleCategoryClick(cat)}>
-                    <div className="cat-icon-container shadow-hover">
+                  <div className="category-item-responsive btn-scale card" key={i} onClick={() => handleCategoryClick(cat)}>
+                    <div className="cat-icon-container">
                       {i === 0 ? '🛒' : i === 1 ? '💊' : i === 2 ? '🍎' : '🍷'}
                     </div>
-                    <span>{cat}</span>
+                    <div className="cat-info">
+                      <span className="font-bold">{cat}</span>
+                      <p className="text-xs">Ver produtos</p>
+                    </div>
+                    <ChevronRight size={16} className="text-muted ml-auto" />
                   </div>
                 ))}
               </div>
@@ -148,17 +152,21 @@ export default function ClientDashboard() {
                 <h3>Ofertas Populares</h3>
                 <button className="see-all btn-scale text-primary" onClick={() => setActiveTab('offers')}>Ver todas</button>
               </div>
-              <div className="products-scroll pb-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[1, 2, 3].map((item) => loading ? <div className="skeleton product-skeleton" key={item}></div> : (
-                  <div className="product-card card-hover" key={item}>
-                    <div className="discount-tag">-10%</div>
-                    <div className="product-img">{item === 1 ? '🥩' : item === 2 ? '🍺' : '🍞'}</div>
-                    <div className="product-info">
+                  <div className="product-card-responsive card card-hover" key={item}>
+                    <div className="product-badge">-10%</div>
+                    <div className="product-visual">{item === 1 ? '🥩' : item === 2 ? '🍺' : '🍞'}</div>
+                    <div className="product-details">
                       <div className="rating">⭐⭐⭐⭐⭐</div>
-                      <h4>{item === 1 ? 'Picanha' : item === 2 ? 'Heineken 6x' : 'Pão de Forma'}</h4>
-                      <span className="price">R$ {item === 1 ? '59,90' : '35,90'}</span>
+                      <h4>{item === 1 ? 'Picanha Bovina' : item === 2 ? 'Heineken 6x350ml' : 'Pão de Forma Artesanal'}</h4>
+                      <div className="product-footer">
+                        <span className="price">R$ {item === 1 ? '59,90' : '35,90'}</span>
+                        <button className="add-btn-circular btn-scale" onClick={() => setActiveTab('new')}>
+                          <Plus size={20} color="#fff"/>
+                        </button>
+                      </div>
                     </div>
-                    <button className="add-btn btn-scale" onClick={() => setActiveTab('new')}><Plus size={20} color="#fff"/></button>
                   </div>
                 ))}
               </div>
@@ -585,7 +593,6 @@ export default function ClientDashboard() {
         </main>
       </div>
 
-      {/* BOTTOM NAV (Mobile Only) */}
       <nav className="bottom-nav mobile-only">
         <button className={`nav-item ${activeTab === 'home' ? 'active' : ''}`} onClick={() => setActiveTab('home')}>
           <Home size={24} />

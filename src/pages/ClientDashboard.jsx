@@ -130,40 +130,49 @@ export default function ClientDashboard() {
                 <div className="promo-image">🛒</div>
               </div>
             )}
+            
+            {/* SEARCH BAR REFINED */}
+            <div className="search-container mb-4">
+              <div className="search-box card animate-fade-in">
+                <Search size={20} className="text-muted" />
+                <input 
+                  type="text" 
+                  placeholder="Buscar no supermercado..." 
+                  className="search-input"
+                />
+              </div>
+            </div>
+
             <section className="categories-section mt-4">
               <h3>Categorias</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
+              <div className="categories-grid-responsive">
                 {['Supermercado', 'Farmácia', 'Hortifruti', 'Bebidas'].map((cat, i) => (
-                  <div className="category-item-responsive btn-scale card" key={i} onClick={() => handleCategoryClick(cat)}>
-                    <div className="cat-icon-container">
+                  <div className="category-card animate-fade-in" key={i} onClick={() => handleCategoryClick(cat)} style={{animationDelay: `${i * 0.1}s`}}>
+                    <div className="cat-icon">
                       {i === 0 ? '🛒' : i === 1 ? '💊' : i === 2 ? '🍎' : '🍷'}
                     </div>
-                    <div className="cat-info">
-                      <span className="font-bold">{cat}</span>
-                      <p className="text-xs">Ver produtos</p>
-                    </div>
-                    <ChevronRight size={16} className="text-muted ml-auto" />
+                    <span>{cat}</span>
                   </div>
                 ))}
               </div>
             </section>
-            <section className="offers-section mt-4">
-              <div className="section-header">
+
+            <section className="offers-section mt-5">
+              <div className="section-header flex justify-between items-center mb-3">
                 <h3>Ofertas Populares</h3>
-                <button className="see-all btn-scale text-primary" onClick={() => setActiveTab('offers')}>Ver todas</button>
+                <button className="text-primary font-bold text-sm" onClick={() => setActiveTab('offers')}>Ver todas</button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {[1, 2, 3].map((item) => loading ? <div className="skeleton product-skeleton" key={item}></div> : (
-                  <div className="product-card-responsive card card-hover" key={item}>
-                    <div className="product-badge">-10%</div>
-                    <div className="product-visual">{item === 1 ? '🥩' : item === 2 ? '🍺' : '🍞'}</div>
-                    <div className="product-details">
-                      <div className="rating">⭐⭐⭐⭐⭐</div>
-                      <h4>{item === 1 ? 'Picanha Bovina' : item === 2 ? 'Heineken 6x350ml' : 'Pão de Forma Artesanal'}</h4>
-                      <div className="product-footer">
-                        <span className="price">R$ {item === 1 ? '59,90' : '35,90'}</span>
-                        <button className="add-btn-circular btn-scale" onClick={() => setActiveTab('new')}>
-                          <Plus size={20} color="#fff"/>
+              <div className="offers-row pb-2">
+                {[1, 2, 3, 4].map((item) => (
+                  <div className="product-card-premium animate-fade-in" key={item}>
+                    <div className="discount-badge">-10%</div>
+                    <div className="product-img-box">{item === 1 ? '🥩' : item === 2 ? '🍺' : item === 3 ? '🍞' : '🥛'}</div>
+                    <div className="product-content">
+                      <h4>{item === 1 ? 'Picanha Premium' : item === 2 ? 'Heineken 6x350ml' : item === 3 ? 'Pão Artesanal' : 'Leite Integral 1L'}</h4>
+                      <div className="product-price-row">
+                        <span className="price-tag">R$ {item === 1 ? '59,90' : item === 2 ? '35,90' : '12,50'}</span>
+                        <button className="add-btn-small" onClick={() => setActiveTab('new')}>
+                          <Plus size={18} />
                         </button>
                       </div>
                     </div>
